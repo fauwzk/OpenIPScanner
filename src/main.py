@@ -3,10 +3,10 @@ from pythonping import ping
 import socket
 import time
 
-adressMin = int(ipaddress.IPv4Address(str(input("Adress min: "))))
-adressMax = int(ipaddress.IPv4Address(str(input("Adress max: "))))
+addressMin = int(ipaddress.IPv4Address(str(input("address min: "))))
+addressMax = int(ipaddress.IPv4Address(str(input("address max: "))))
 
-cal = adressMax - adressMin
+total_address = addressMax - addressMin
 i = 0
 ip_list = []
 workingip_list = []
@@ -37,7 +37,7 @@ def test_ip(ip):
 
 while True:
 	ip = ip1 + i
-	if i > cal:
+	if i > total_address:
 		break
 	else:
 		ip = str(ipaddress.IPv4Address(ip))
@@ -45,4 +45,4 @@ while True:
 		test_ip(ip)
 	i = i + 1
 
-print(f"Working IPs ({len(workingip_list)}/{cal}): {workingip_list}")
+print(f"Working IPs ({len(workingip_list)}/{total_address}): {workingip_list}")
