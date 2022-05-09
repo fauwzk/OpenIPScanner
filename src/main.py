@@ -21,14 +21,14 @@ def run():
 	tkinter.messagebox.showinfo("Working IPs", f"{len(nettools.workingip_list)}/{nettools.totalAddress}: {nettools.workingip_list}")
 
 ipminLabel = Label(window, text="IP min")
-ipminLabel.pack()
+ipminLabel.pack(side = LEFT )
 ipminEntry = Entry(window, bd=5)
-ipminEntry.pack()
+ipminEntry.pack(side = LEFT )
 
 ipmaxLabel = Label(window, text="IP max")
-ipmaxLabel.pack()
+ipmaxLabel.pack(side = LEFT )
 ipmaxEntry = Entry(window, bd=5)
-ipmaxEntry.pack()
+ipmaxEntry.pack(side = LEFT )
 
 portsLabel = Label(window, text="Test ports")
 portsLabel.pack()
