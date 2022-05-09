@@ -3,9 +3,6 @@ import socket
 import ipaddress
 import sys
 
-workingip_list = []
-notworkingip_list = []
-
 def testPorts(ip, ports):
 	a_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	a_socket.settimeout(0.1)
@@ -20,9 +17,12 @@ def testPorts(ip, ports):
 			continue
 		a_socket.close()
 
-def main(addressMin, addressMax, ports, status):
+def main(addressMin, addressMax, ports, showfail):
+	global workingip_list, notworkingip_list
+	workingip_list = []
+	notworkingip_list = []
 	global showFail
-	showFail = status
+	showFail = showfail
 	global totalAddress
 	totalAddress = int(ipaddress.IPv4Address(str(addressMax))) - int(ipaddress.IPv4Address(str(addressMin)))
 	ipEnd = 0
@@ -33,7 +33,8 @@ def main(addressMin, addressMax, ports, status):
 		if a.success() == True:
 			print(f"Work: {ip} Ping: {a.rtt_avg_ms}ms")
 			workingip_list.append(ip)
-			testPorts(ip, ports)
+			if ports != 0:
+				testPorts(ip, ports)
 		else:
 			if showFail == 1:
 				print(f"Not working: {ip}")
