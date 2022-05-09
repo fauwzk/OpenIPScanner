@@ -1,12 +1,42 @@
-import openipscanner
+import tkinter
+from tkinter import *
+import nettools
 
-""" addressMin = int(ipaddress.IPv4Address(str(input("address min: "))))
-addressMax = int(ipaddress.IPv4Address(str(input("address max: ")))) """
+window = tkinter.Tk()
 
-addressMin = "192.168.80.1"
-addressMax = "192.168.80.128"
-port = 21
+def run():
+	addressMin = ipminEntry.get()
+	addressMax = ipmaxEntry.get()
+	ports = (portsEntry.get()).split()
+	status = var.get()
+	print(f"{addressMin}, {addressMax}, {ports}, {status}")
+	nettools.main(addressMin, addressMax, ports, status)
 
-openipscanner.run(addressMin, addressMax, port)
+ipminLabel = Label(window, text="IP min")
+ipminLabel.pack()
+ipminEntry = Entry(window, bd =5)
+ipminEntry.pack()
 
-print(f"Working IPs ({len(openipscanner.workingip_list)}/{openipscanner.totalAddress}): {openipscanner.workingip_list}")
+ipmaxLabel = Label(window, text="IP max")
+ipmaxLabel.pack()
+ipmaxEntry = Entry(window, bd =5)
+ipmaxEntry.pack()
+
+portsLabel = Label(window, text="Ports")
+portsLabel.pack()
+portsEntry = Entry(window, bd =5)
+portsEntry.pack()
+
+var = IntVar()
+runLabel = Label(window, text="Show fail")
+runLabel.pack()
+R1 = Radiobutton(window, text="True", variable=var, value=1)
+R1.pack()
+
+R2 = Radiobutton(window, text="False", variable=var, value=0)
+R2.pack()
+
+runButton = tkinter.Button(window, text ="Run", command = run)
+runButton.pack()
+
+window.mainloop()
