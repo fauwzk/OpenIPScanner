@@ -1,0 +1,11 @@
+{
+    "ip_timeout": 0.8,
+    "port_timeout": 0.4,
+    "show_fail": "True",
+    "test_ports": [
+        89,
+        443,
+        25565,
+        80
+    ]
+}
