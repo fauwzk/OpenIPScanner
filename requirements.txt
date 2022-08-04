@@ -1,4 +1,4 @@
 import rich
 
 
-rich
+pip install rich
