@@ -1,4 +1,5 @@
 import sys, ipaddress, rich, socket, os, json
+from pythonping import ping
 
 def clear_screen():
 	if(os.name == 'posix'):
@@ -12,7 +13,7 @@ def set_testports(port):
 		ports = port
 	else:
 		ports = port.split(" ")
-
+#
 def set_iptimeout(ip):
 	global ip_timeout
 	ip_timeout = float(ip)
@@ -72,7 +73,7 @@ def test_ip(addressMin, addressMax, showFail):
 	while totalAddress >= ipEnd:
 		ip = ipaddress.IPv4Address(int(ipaddress.IPv4Address(addressMin)) + ipEnd)
 		ipEnd += 1
-		ip_test = ip(str(ip), count=1, timeout=ip_timeout)
+		ip_test = ping(str(ip), count=1, timeout=ip_timeout)
 		if ip_test.success() == True:
 			rich.print(f"Working: [green]{ip}[/green] ip: [blue]{ip_test.rtt_avg_ms}[/blue] ms")
 			workingip_list.append(str(ip))
