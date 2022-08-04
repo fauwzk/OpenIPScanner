@@ -1,5 +1,4 @@
 import sys
-from numpy import save
 from pythonping import ping
 import ipaddress
 import rich 
