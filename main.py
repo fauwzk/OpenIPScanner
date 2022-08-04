@@ -34,15 +34,15 @@ def set_showfail(show_fail):
 
 def helper(zone):
 	if zone == 'main':
-		print("    ip {test/show} <first ip> <last ip>")
-		print("    settings")
-		print("    exit") 
-	if zone == 'settings':
-		print("    show")
-		print("    set[")
-		print("        timout {ip/port}")
-		print("        fail {True/False}")
-		print("       ]")
+		print("todo")
+	elif zone == 'ip':
+		print("todo")
+	elif zone == 'ports':
+		print("todo")
+	elif zone == 'settings':
+		print("todo")
+	else:
+		print(f'Unknown menu: {zone}')
 
 def test_ip(addressMin, addressMax, showFail):
 	global workingip_list, notworkingip_list, totalAddress
@@ -53,7 +53,6 @@ def test_ip(addressMin, addressMax, showFail):
 	while totalAddress >= ipEnd:
 		ip = ipaddress.IPv4Address(int(ipaddress.IPv4Address(addressMin)) + ipEnd)
 		ipEnd += 1
-		
 		ip_test = ip(str(ip), count=1, timeout=ip_timeout)
 		if ip_test.success() == True:
 			rich.print(f"Working: [green]{ip}[/green] ip: [blue]{ip_test.rtt_avg_ms}[/blue] ms")
@@ -66,9 +65,9 @@ def test_ip(addressMin, addressMax, showFail):
 	print("")
 
 def test_port(ips, ports, showFail):
-	if type(ips) == list:
+	if type(ips) == list and len(ips) != 0:
 		for ip in ips:
-			if type(ports) == list:
+			if type(ports) == list and len(ports) != 0:
 				for port in ports:
 					sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 					sock.settimeout(port_timeout)
@@ -81,25 +80,37 @@ def test_port(ips, ports, showFail):
 							print(f"{ip}:{port} is not open")
 						else:
 							continue
+			else:
+				print("Error in ports list")
+	else:
+		print("Error in ip list")
 	print("")
 
 settings_filename = 'settings.json'
+defaults_ports = [22, 443, 25565, 80]
+set_iptimeout(0.1)
+set_porttimeout(0.1)
+set_showfail("False")
+set_testports(defaults_ports)
+
 try:
 	with open(settings_filename, 'r') as savefile:
 		save_json = json.load(savefile)
 		print(save_json)
-		set_testports(save_json["test_ports"])
-		set_iptimeout(save_json["ip_timeout"])
-		set_porttimeout(save_json["port_timeout"])
-		set_showfail(save_json["show_fail"])
+		# set_testports(save_json["test_ports"])
+		# set_iptimeout(save_json["ip_timeout"])
+		# set_porttimeout(save_json["port_timeout"])
+		# set_showfail(save_json["show_fail"])
+		for var in save_json:
+			print(var)
+			if var in globals() or var in locals():
+				var = save_json[var]
+				print(f"Loaded {var}")
+			else:
+				print(f"Var not loaded {var}")
 	savefile.close()
 except:
-	print(f"{settings_filename} does not exist")
-	defaults_ports = [22, 443, 25565, 80]
-	set_iptimeout(0.1)
-	set_porttimeout(0.1)
-	set_showfail("False")
-	set_testports(defaults_ports)
+	print(f"{settings_filename} does not exist.\n Loading defaults")
 
 rich.print("|[bold]nettools[/bold] [italic]v0.1a[/italic]|")
 rich.print("Type [italic]help[/italic] to begin")
@@ -111,6 +122,8 @@ while True:
 	elif command[0] == "ip":
 		while True:
 			ip_command = input("ip> ").split(" ")
+			if ip_command[0] == "help":
+				helper('ip')
 			if ip_command[0] == "test":
 				if len(ip_command) < 3:
 					print("Error: Not enough arguments")
@@ -125,6 +138,8 @@ while True:
 	elif command[0] == "port":
 		while True:
 			port_command = input("port> ").split(" ")
+			if port_command[0] == "help":
+				helper('ports')
 			if port_command[0] == "test":
 				if port_command[1] == "working":
 					try:
@@ -175,7 +190,7 @@ while True:
 				# 		set_testports(input('Enter ports with spaces: '))
 				# 	print(f"Ports set: {ports}")
 			elif settings_command[0] == "save":
-				save_data = {"ip_timeout":ip_timeout, "port_timeout":port_timeout, "show_fail":showfail, "test_ports":ports}
+				save_data = {"ip_timeout":ip_timeout, "port_timeout":port_timeout, "showfail":showfail, "testlmports":ports}
 				save_json = json.dumps(save_data, indent=4)
 				print(save_json)
 				with open(settings_filename, "w") as savefile:
@@ -185,10 +200,10 @@ while True:
 				with open(settings_filename, 'r') as savefile:
 					save_json = json.load(savefile)
 					print(save_json)
-					set_testports(save_json["test_ports"])
+					set_testports(save_json["testports"])
 					set_iptimeout(save_json["ip_timeout"])
 					set_porttimeout(save_json["port_timeout"])
-					set_showfail(save_json["show_fail"])
+					set_showfail(save_json["showfail"])
 				savefile.close()
 				defaults_ports = [22, 443, 25565, 80]
 				set_iptimeout(0.1)
