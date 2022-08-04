@@ -101,12 +101,12 @@ try:
 		# set_porttimeout(save_json["port_timeout"])
 		# set_showfail(save_json["show_fail"])
 		for var in save_json:
-			print(var)
 			if var in globals() or var in locals():
+				varname = var
 				var = save_json[var]
-				print(f"Loaded {var}")
+				print(f"Loaded {varname}: {var}")
 			else:
-				print(f"Var not loaded {var}")
+				print(f"Var not loaded {varname}: {var}")
 	savefile.close()
 except:
 	print(f"{settings_filename} does not exist.\n Loading defaults")
