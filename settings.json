@@ -2,7 +2,7 @@
     "ip_timeout": 0.8,
     "port_timeout": 0.4,
     "showfail": "True",
-    "testports": [
+    "ports": [
         89,
         443,
         25565,

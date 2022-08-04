@@ -1,10 +1,4 @@
-import sys
-from pythonping import ping
-import ipaddress
-import rich 
-import socket
-import os
-import json
+import sys, ipaddress, rich, socket, os, json
 
 def clear_screen():
 	if(os.name == 'posix'):
@@ -42,6 +36,32 @@ def helper(zone):
 		print("todo")
 	else:
 		print(f'Unknown menu: {zone}')
+
+def load_defaults_settings():
+	global defaults_ports
+	defaults_ports = [22, 443, 25565, 80]
+	set_iptimeout(0.1)
+	set_porttimeout(0.1)
+	set_showfail("False")
+	set_testports(defaults_ports)
+
+def load_settings():
+	global settings_filename; settings_filename = 'settings.json'
+	try:
+		with open(settings_filename, 'r') as savefile:
+			save_json = json.load(savefile)
+			print(save_json)
+			set_testports(save_json["ports"])
+			set_iptimeout(save_json["ip_timeout"])
+			set_porttimeout(save_json["port_timeout"])
+			set_showfail(save_json["showfail"])
+	except Exception as e:
+		print(f"{settings_filename} does not exist.\nLoading defaults")
+		load_defaults_settings()
+
+clear_screen()
+load_settings()
+print("\n")
 
 def test_ip(addressMin, addressMax, showFail):
 	global workingip_list, notworkingip_list, totalAddress
@@ -84,32 +104,6 @@ def test_port(ips, ports, showFail):
 	else:
 		print("Error in ip list")
 	print("")
-
-settings_filename = 'settings.json'
-defaults_ports = [22, 443, 25565, 80]
-set_iptimeout(0.1)
-set_porttimeout(0.1)
-set_showfail("False")
-set_testports(defaults_ports)
-
-try:
-	with open(settings_filename, 'r') as savefile:
-		save_json = json.load(savefile)
-		print(save_json)
-		# set_testports(save_json["test_ports"])
-		# set_iptimeout(save_json["ip_timeout"])
-		# set_porttimeout(save_json["port_timeout"])
-		# set_showfail(save_json["show_fail"])
-		for var in save_json:
-			if var in globals() or var in locals():
-				varname = var
-				var = save_json[var]
-				print(f"Loaded {varname}: {var}")
-			else:
-				print(f"Var not loaded {varname}: {var}")
-	savefile.close()
-except:
-	print(f"{settings_filename} does not exist.\n Loading defaults")
 
 rich.print("|[bold]nettools[/bold] [italic]v0.1a[/italic]|")
 rich.print("Type [italic]help[/italic] to begin")
@@ -194,21 +188,15 @@ while True:
 				print(save_json)
 				with open(settings_filename, "w") as savefile:
 					savefile.write(save_json)
-				savefile.close()
 			elif settings_command[0] == "load":
-				with open(settings_filename, 'r') as savefile:
-					save_json = json.load(savefile)
-					print(save_json)
-					set_testports(save_json["testports"])
-					set_iptimeout(save_json["ip_timeout"])
-					set_porttimeout(save_json["port_timeout"])
-					set_showfail(save_json["showfail"])
-				savefile.close()
-				defaults_ports = [22, 443, 25565, 80]
-				set_iptimeout(0.1)
-				set_porttimeout(0.1)
-				set_showfail("False")
-				set_testports(defaults_ports)
+				load_settings()
+				# defaults_ports = [22, 443, 25565, 80]
+				# set_iptimeout(0.1)
+				# set_porttimeout(0.1)
+				# set_showfail("False")
+				# set_testports(defaults_ports)
+			elif settings_command[0] == "defaults":
+				load_defaults_settings()
 			elif settings_command[0] == "clear" or settings_command[0] == "\x0c":
 				clear_screen()
 			elif settings_command[0] == "exit":
