@@ -128,6 +128,8 @@ while True:
 				clear_screen()
 			elif ip_command[0] == "exit":
 				break
+			else:
+				print(f"Unknown command: {command}")
 	elif command[0] == "port":
 		while True:
 			port_command = input("port> ").split(" ")
@@ -151,6 +153,8 @@ while True:
 				clear_screen()
 			elif port_command[0] == "exit":
 				break
+			else:
+				print(f"Unknown command: {command}")
 	elif command[0] == "settings":
 		while True:
 			settings_command = input("settings> ").split(" ")
@@ -201,6 +205,8 @@ while True:
 				clear_screen()
 			elif settings_command[0] == "exit":
 				break
+			else:
+				print(f"Unknown command: {command}")
 	elif command[0] == "clear" or command[0] == "\x0c":
 		clear_screen()
 	elif command[0] == "exit":
