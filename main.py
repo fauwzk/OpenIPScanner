@@ -13,7 +13,7 @@ def set_testports(port):
 		ports = port
 	else:
 		ports = port.split(" ")
-#
+
 def set_iptimeout(ip):
 	global ip_timeout
 	ip_timeout = float(ip)
